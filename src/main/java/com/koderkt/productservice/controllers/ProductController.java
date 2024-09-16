@@ -3,10 +3,8 @@ package com.koderkt.productservice.controllers;
 import com.koderkt.productservice.models.Product;
 import com.koderkt.productservice.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -22,7 +20,7 @@ public class ProductController {
 
     @GetMapping()
     public List<Product> getAllProducts() {
-        return new ArrayList<>();
+        return productService.getAllProducts();
     }
 
     @GetMapping("/{id}")
@@ -36,7 +34,7 @@ public class ProductController {
     }
 
     @PatchMapping("/{id}")
-    public Product updateProduct(@PathVariable Long id) {
+    public Product updateProduct(@PathVariable Long id, @RequestBody Product product) {
         return new Product();
     }
 
