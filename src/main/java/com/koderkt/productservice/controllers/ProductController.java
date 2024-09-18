@@ -1,5 +1,6 @@
 package com.koderkt.productservice.controllers;
 
+import com.koderkt.productservice.exceptions.ProductNotExistException;
 import com.koderkt.productservice.models.Product;
 import com.koderkt.productservice.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +30,8 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public Product getSingleProduct(@PathVariable("id") Long id) {
-        return productService.getSingleProduct(id);
+    public ResponseEntity<Product> getSingleProduct(@PathVariable("id") Long id) throws ProductNotExistException {
+        return new ResponseEntity<>(productService.getSingleProduct(id), HttpStatus.OK);
     }
 
     @PostMapping()

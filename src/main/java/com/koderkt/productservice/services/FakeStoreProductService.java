@@ -1,6 +1,7 @@
 package com.koderkt.productservice.services;
 
 import com.koderkt.productservice.dtos.FakeStoreProductDto;
+import com.koderkt.productservice.exceptions.ProductNotExistException;
 import com.koderkt.productservice.models.Category;
 import com.koderkt.productservice.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +38,11 @@ public class FakeStoreProductService implements ProductService {
     }
 
     @Override
-    public Product getSingleProduct(Long id) {
+    public Product getSingleProduct(Long id) throws ProductNotExistException {
         FakeStoreProductDto productDto = restTemplate.getForObject("https://fakestoreapi.com/products/" + id, FakeStoreProductDto.class);
+        if (productDto == null){
+            throw new ProductNotExistException("Product with id " + id + " doesn't exist.");
+        }
         return convertFakeStoreProductToProduct(productDto);
     }
 
@@ -46,6 +50,7 @@ public class FakeStoreProductService implements ProductService {
     public List<Product> getAllProducts() {
         FakeStoreProductDto[] productsDto = restTemplate.getForObject("https://fakestoreapi.com/products", FakeStoreProductDto[].class);
         List<Product> products = new ArrayList<>();
+        assert productsDto != null;
         for (FakeStoreProductDto fakeStoreProduct : productsDto) {
             Product product = convertFakeStoreProductToProduct(fakeStoreProduct);
             products.add(product);
