@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service("selfProductService")
 public class SelfProductService implements ProductService{
@@ -22,7 +23,11 @@ public class SelfProductService implements ProductService{
 
     @Override
     public Product getSingleProduct(Long id) throws ProductNotExistException {
-        return null;
+        Optional<Product> productOptional = productRepository.findById(id);
+        if(productOptional.isEmpty()){
+            throw new ProductNotExistException("Product with id: " + id + " doesn't exists.");
+        }
+        return productOptional.get();
     }
 
     @Override
@@ -31,9 +36,11 @@ public class SelfProductService implements ProductService{
     }
 
     @Override
-    public Product addNewProduct(Product product) {
+    public Product addNewProduct(String title, double prince, String categoryName, String description, String imageUrl) {
         return null;
     }
+
+
 
     @Override
     public Product updateProduct(Product product) {
@@ -43,5 +50,10 @@ public class SelfProductService implements ProductService{
     @Override
     public Product replaceProduct(Long id, Product product) {
         return null;
+    }
+
+    @Override
+    public void deleteProduct(Long id) {
+
     }
 }

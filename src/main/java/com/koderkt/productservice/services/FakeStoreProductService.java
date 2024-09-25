@@ -58,12 +58,12 @@ public class FakeStoreProductService implements ProductService {
         return products;
     }
 
-
-    //    Not adding logic since we don't have database connected
     @Override
-    public Product addNewProduct(Product product) {
+    public Product addNewProduct(String title, double prince, String categoryName, String description, String imageUrl) {
         return null;
     }
+
+
 
     @Override
     public Product updateProduct(Product product) {
@@ -84,6 +84,11 @@ public class FakeStoreProductService implements ProductService {
         FakeStoreProductDto response = restTemplate.execute("https://fakestoreapi.com/products/" + id, HttpMethod.PUT, requestCallback, responseExtractor);
 
         return convertFakeStoreProductToProduct(response);
+    }
+
+    @Override
+    public void deleteProduct(Long id) {
+
     }
 
 }
