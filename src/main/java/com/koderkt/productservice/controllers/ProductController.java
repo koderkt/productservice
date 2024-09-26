@@ -37,7 +37,7 @@ public class ProductController {
 
     @PostMapping()
     public Product addNewProduct(@RequestBody Product product) {
-        return new Product();
+        return productService.addNewProduct(product);
     }
 
     @PatchMapping("/{id}")

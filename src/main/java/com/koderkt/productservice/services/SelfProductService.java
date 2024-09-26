@@ -1,6 +1,7 @@
 package com.koderkt.productservice.services;
 
 import com.koderkt.productservice.exceptions.ProductNotExistException;
+import com.koderkt.productservice.models.Category;
 import com.koderkt.productservice.models.Product;
 import com.koderkt.productservice.repositories.CategoryRepository;
 import com.koderkt.productservice.repositories.ProductRepository;
@@ -36,8 +37,17 @@ public class SelfProductService implements ProductService{
     }
 
     @Override
-    public Product addNewProduct(String title, double prince, String categoryName, String description, String imageUrl) {
-        return null;
+    public Product addNewProduct(Product product) {
+
+        Category category = product.getCategory();
+        Optional<Category> optionalCategory = categoryRepository.findByName(category.getName());
+        if(optionalCategory.isEmpty()) {
+
+            product.setCategory(categoryRepository.save(category));
+        }else{
+            product.setCategory(optionalCategory.get());
+        }
+        return productRepository.save(product);
     }
 
 
