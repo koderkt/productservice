@@ -12,7 +12,6 @@ import org.springframework.web.client.RequestCallback;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Service("fakeStoreProductService")
@@ -63,12 +62,16 @@ public class FakeStoreProductService implements ProductService {
         return null;
     }
 
-
-
     @Override
-    public Product updateProduct(Product product) {
+    public Product updateProduct(Long id, Product product) throws ProductNotExistException {
         return null;
     }
+
+    @Override
+    public List<Product> getProductsByCategory(String categoryName) {
+        return List.of();
+    }
+
 
     @Override
     public Product replaceProduct(Long id, Product product) {
@@ -87,8 +90,9 @@ public class FakeStoreProductService implements ProductService {
     }
 
     @Override
-    public void deleteProduct(Long id) {
+    public Void deleteProduct(Long id) {
 
+        return null;
     }
 
 }

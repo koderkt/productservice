@@ -43,7 +43,6 @@ public class SelfProductService implements ProductService {
         Category category = product.getCategory();
         Optional<Category> optionalCategory = categoryRepository.findByName(category.getName());
         if (optionalCategory.isEmpty()) {
-
             product.setCategory(categoryRepository.save(category));
         } else {
             product.setCategory(optionalCategory.get());
@@ -77,12 +76,33 @@ public class SelfProductService implements ProductService {
     }
 
     @Override
-    public Product replaceProduct(Long id, Product product) {
-        return null;
+    public Product replaceProduct(Long id, Product product) throws ProductNotExistException {
+        Optional<Product> productOptional = productRepository.findById(id);
+        if(productOptional.isEmpty()){
+            throw new ProductNotExistException("Product with id: " + id + " doesn't exist");
+        }
+        Product savedProduct = productOptional.get();
+        savedProduct.setTitle(product.getTitle());
+        savedProduct.setDescription(product.getDescription());
+        savedProduct.setPrice(product.getPrice());
+        savedProduct.setPrice(product.getPrice());
+        savedProduct.setCategory(product.getCategory());
+
+        return productRepository.save(savedProduct);
     }
 
     @Override
-    public void deleteProduct(Long id) {
+    public List<Product> getProductsByCategory(String categoryName) {
 
+        return productRepository.findByCategoryName(categoryName);
+    }
+    @Override
+    public Void deleteProduct(Long id) throws ProductNotExistException {
+        Optional<Product> productOptional = productRepository.findById(id);
+        if(productOptional.isEmpty()){
+            throw new ProductNotExistException("Product with id: " + id + " doesn't exist");
+        }
+        productRepository.deleteById(id);
+        return null;
     }
 }

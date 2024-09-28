@@ -10,6 +10,9 @@ public interface ProductService {
     List<Product> getAllProducts();
     Product addNewProduct(Product product);
     Product updateProduct(Long id, Product product) throws ProductNotExistException;
-    Product replaceProduct(Long id, Product product);
-    void deleteProduct(Long id);
+
+    List<Product> getProductsByCategory(String categoryName);
+
+    Product replaceProduct(Long id, Product product) throws ProductNotExistException;
+    Void deleteProduct(Long id) throws ProductNotExistException;
 }

@@ -41,16 +41,23 @@ public class ProductController {
     }
 
     @PatchMapping("/{id}")
-    public Product updateProduct(@PathVariable Long id, @RequestBody Product product) {
+    public Product updateProduct(@PathVariable Long id, @RequestBody Product product) throws ProductNotExistException {
         return productService.updateProduct(id, product);
     }
 
     @PutMapping("/{id}")
-    public Product replaceProduct(@PathVariable Long id, @RequestBody Product product) {
-        return new Product();
+    public Product replaceProduct(@PathVariable Long id, @RequestBody Product product) throws ProductNotExistException {
+        return productService.replaceProduct(id, product);
     }
 
+    @GetMapping("/category/{categoryName}")
+    public List<Product> getAllProductsByCategory(@PathVariable("categoryName") String categoryName){
+        return productService.getProductsByCategory(categoryName);
+    }
+
+
     @DeleteMapping("/{id}")
-    public void deleteProduct(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) throws ProductNotExistException {
+        return new ResponseEntity<>(productService.deleteProduct(id), HttpStatus.NO_CONTENT);
     }
 }
