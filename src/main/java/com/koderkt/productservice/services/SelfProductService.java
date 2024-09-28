@@ -8,16 +8,17 @@ import com.koderkt.productservice.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
 @Service("selfProductService")
-public class SelfProductService implements ProductService{
+public class SelfProductService implements ProductService {
     private ProductRepository productRepository;
     private CategoryRepository categoryRepository;
 
     @Autowired
-    public SelfProductService(ProductRepository productRepository, CategoryRepository categoryRepository){
+    public SelfProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
     }
@@ -25,7 +26,7 @@ public class SelfProductService implements ProductService{
     @Override
     public Product getSingleProduct(Long id) throws ProductNotExistException {
         Optional<Product> productOptional = productRepository.findById(id);
-        if(productOptional.isEmpty()){
+        if (productOptional.isEmpty()) {
             throw new ProductNotExistException("Product with id: " + id + " doesn't exists.");
         }
         return productOptional.get();
@@ -41,20 +42,38 @@ public class SelfProductService implements ProductService{
 
         Category category = product.getCategory();
         Optional<Category> optionalCategory = categoryRepository.findByName(category.getName());
-        if(optionalCategory.isEmpty()) {
+        if (optionalCategory.isEmpty()) {
 
             product.setCategory(categoryRepository.save(category));
-        }else{
+        } else {
             product.setCategory(optionalCategory.get());
         }
         return productRepository.save(product);
     }
 
 
-
     @Override
-    public Product updateProduct(Product product) {
-        return null;
+    public Product updateProduct(Long id, Product product) throws ProductNotExistException {
+        Optional<Product> productOptional = productRepository.findById(id);
+        if (productOptional.isEmpty()) throw new ProductNotExistException("Product with id: " + id + " doesn't exist");
+
+        Product savedProduct = productOptional.get();
+        if (product.getTitle() != null) {
+            savedProduct.setTitle(product.getTitle());
+        }
+        if (product.getDescription() != null) {
+            savedProduct.setDescription(product.getDescription());
+        }
+        if (product.getPrice() != null) {
+            savedProduct.setPrice(product.getPrice());
+        }
+        if (product.getImageUrl() != null) {
+            savedProduct.setImageUrl(product.getImageUrl());
+        }
+        if (product.getCategory() != null) {
+            savedProduct.setCategory(product.getCategory());
+        }
+        return productRepository.save(savedProduct);
     }
 
     @Override

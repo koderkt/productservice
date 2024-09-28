@@ -9,7 +9,7 @@ public interface ProductService {
     Product getSingleProduct(Long id) throws ProductNotExistException;
     List<Product> getAllProducts();
     Product addNewProduct(Product product);
-    Product updateProduct(Product product);
+    Product updateProduct(Long id, Product product) throws ProductNotExistException;
     Product replaceProduct(Long id, Product product);
     void deleteProduct(Long id);
 }
