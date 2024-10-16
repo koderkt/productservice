@@ -1,8 +1,12 @@
 package com.koderkt.productservice.controllers;
 
+import com.koderkt.productservice.commons.AuthenticationCommons;
+import com.koderkt.productservice.dtos.Role;
+import com.koderkt.productservice.dtos.UserDto;
 import com.koderkt.productservice.exceptions.ProductNotExistException;
 import com.koderkt.productservice.models.Product;
 import com.koderkt.productservice.services.ProductService;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -15,15 +19,33 @@ import java.util.List;
 @RequestMapping("/products")
 public class ProductController {
     private final ProductService productService;
-
+    private AuthenticationCommons authenticationCommons;
 
     @Autowired
-    public ProductController(@Qualifier("selfProductService") ProductService productService) {
+    public ProductController(@Qualifier("selfProductService") ProductService productService, AuthenticationCommons authenticationCommons) {
         this.productService = productService;
+        this.authenticationCommons = authenticationCommons;
     }
 
     @GetMapping()
     public ResponseEntity<List<Product>> getAllProducts() {
+//        UserDto userDto = authenticationCommons.validateToken(token);
+//        if (userDto == null) {
+//            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+//        }
+//
+//        boolean isAdmin = false;
+//
+//        for (Role role : userDto.getRoles()) {
+//            if (role.getName() == "ADMIN") {
+//                isAdmin = true;
+//                break;
+//            }
+//        }
+//        if (!isAdmin) {
+//            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+//        }
+
         return new ResponseEntity<>(
                 productService.getAllProducts(),
                 HttpStatus.OK
@@ -51,7 +73,7 @@ public class ProductController {
     }
 
     @GetMapping("/category/{categoryName}")
-    public List<Product> getAllProductsByCategory(@PathVariable("categoryName") String categoryName){
+    public List<Product> getAllProductsByCategory(@PathVariable("categoryName") String categoryName) {
         return productService.getProductsByCategory(categoryName);
     }
 

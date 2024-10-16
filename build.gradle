@@ -36,6 +36,8 @@ dependencies {
 	implementation 'org.postgresql:postgresql'
 	// https://mvnrepository.com/artifact/org.assertj/assertj-core
 	testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.26.3'
+	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-oauth2-resource-server
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-resource-server', version: '3.3.4'
 
 }
 
