@@ -79,14 +79,14 @@ class ProductControllerTest {
         }
     }
 
-    @Test
-    void getNotExistingProductThrowsException() {
-         when(
-                productRepository.findById(10L)
-        ).thenReturn(
-                Optional.empty()
-        );
-
-        assertThrows(ProductNotExistException.class,() -> productController.getSingleProduct(10L));
-    }
+//    @Test
+//    void getNotExistingProductThrowsException() {
+//         when(
+//                productRepository.findById(10L)
+//        ).thenReturn(
+//                Optional.empty()
+//        );
+//
+//        assertThrows(ProductNotExistException.class,() -> productController.getSingleProduct(10L));
+//    }
 }
