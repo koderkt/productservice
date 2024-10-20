@@ -5,6 +5,7 @@ import com.koderkt.productservice.exceptions.ProductNotExistException;
 import com.koderkt.productservice.models.Category;
 import com.koderkt.productservice.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpMessageConverterExtractor;
@@ -13,14 +14,17 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service("fakeStoreProductService")
 public class FakeStoreProductService implements ProductService {
     private final RestTemplate restTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Autowired
-    public FakeStoreProductService(RestTemplate restTemplate) {
+    public FakeStoreProductService(RestTemplate restTemplate, RedisTemplate<String, Object> redisTemplate) {
         this.restTemplate = restTemplate;
+        this.redisTemplate = redisTemplate;
     }
 
     private Product convertFakeStoreProductToProduct(FakeStoreProductDto fakeStoreProduct) {
@@ -38,11 +42,17 @@ public class FakeStoreProductService implements ProductService {
 
     @Override
     public Product getSingleProduct(Long id) throws ProductNotExistException {
+        Product p1 = (Product) redisTemplate.opsForHash().get("PRODUCTS", "PRODUCT_" + id);
+        if(p1 != null){
+            return p1;
+        }
         FakeStoreProductDto productDto = restTemplate.getForObject("https://fakestoreapi.com/products/" + id, FakeStoreProductDto.class);
-        if (productDto == null){
+        if (productDto == null) {
             throw new ProductNotExistException("Product with id " + id + " doesn't exist.");
         }
-        return convertFakeStoreProductToProduct(productDto);
+        Product p = convertFakeStoreProductToProduct(productDto);
+        redisTemplate.opsForHash().put("PRODUCTS", "PRODUCT_" + id, p);
+        return p;
     }
 
     @Override
